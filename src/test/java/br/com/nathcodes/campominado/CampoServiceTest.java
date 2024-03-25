@@ -150,6 +150,10 @@ class CampoServiceTest {
 
         Campo campo22 = new Campo(2, 2);
 
+        assertFalse(campo22.isAberto());
+        assertFalse(campo11.isAberto());
+        assertFalse(campo12.isAberto());
+
         campoService.adicionarVizinho(campo22, campo11);
         campoService.adicionarVizinho(campo22, campo12);
         campoService.adicionarVizinho(campo, campo22);

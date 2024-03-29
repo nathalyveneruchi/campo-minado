@@ -15,5 +15,9 @@ public class Aplicacao {
         Tabuleiro tabuleiro = new Tabuleiro(6, 6, 6);
         tabuleiroService.iniciarJogo(campos, 6, 6, 6);
 
+        tabuleiroService.alternarMarcacao(campos, 4, 4);
+        tabuleiroService.alternarMarcacao(campos, 4, 5);
+        tabuleiroService.abrir(campos, 3, 3);
+
     }
 }

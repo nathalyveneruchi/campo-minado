@@ -20,11 +20,23 @@ public class TabuleiroService {
         sortearMinas(campos, minas);
     }
 
-    private void gerarCampos(final List<Campo> campos, final int linhas, final int colunas) {
-        for (int l = 0; l < linhas; l++) {
-            for (int c = 0; c < colunas; c++) {
-                campos.add(new Campo(l, c));
+    public void abrir(final List<Campo> campos, final int linha, final int coluna) {
+        campos.parallelStream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
+                .findFirst()
+                .ifPresent(campoService::abrir);
+    }
 
+    public void alternarMarcacao(final List<Campo> campos, final int linha, final int coluna) {
+        campos.parallelStream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
+                .findFirst()
+                .ifPresent(campoService::alternarMarcacao);
+    }
+
+
+    private void gerarCampos(final List<Campo> campos, final int linhas, final int colunas) {
+        for (int linha = 0; linha < linhas; linha++) {
+            for (int coluna = 0; coluna < colunas; coluna++) {
+                campos.add(new Campo(linha, coluna));
             }
         }
 

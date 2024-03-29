@@ -11,7 +11,7 @@ public class Tabuleiro {
 
     private final List<Campo> campos = new ArrayList<>();
 
-    public Tabuleiro(final int linhas, final int colunas, final int mina) {
+    public Tabuleiro(final int linhas, final int colunas, final int minas) {
         this.linhas = linhas;
         this.colunas = colunas;
         this.minas = minas;

@@ -7,9 +7,9 @@ import java.util.List;
 
 public class Tabuleiro {
 
-    private int linhas;
-    private int colunas;
-    private int minas;
+    private final int linhas;
+    private final int colunas;
+    private final int minas;
 
     private final List<Campo> campos = new ArrayList<>();
 
@@ -24,8 +24,7 @@ public class Tabuleiro {
 
     public void abrir(final int linha, final int coluna) {
         try {
-            campos.parallelStream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
-                    .findFirst()
+            campos.parallelStream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna).findFirst()
                     .ifPresent(Campo::abrir);
         } catch (ExplosaoException e) {
             campos.forEach(c -> c.setAberto(true));
@@ -35,8 +34,7 @@ public class Tabuleiro {
     }
 
     public void alternarMarcacao(final int linha, final int coluna) {
-        campos.parallelStream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna)
-                .findFirst()
+        campos.parallelStream().filter(c -> c.getLinha() == linha && c.getColuna() == coluna).findFirst()
                 .ifPresent(Campo::alternarMarcacao);
     }
 
@@ -44,7 +42,8 @@ public class Tabuleiro {
     private void gerarCampos() {
         for (int linha = 0; linha < linhas; linha++) {
             for (int coluna = 0; coluna < colunas; coluna++) {
-                campos.add(new Campo(linha, coluna));
+                Campo campo = new Campo(linha, coluna);
+                campos.add(campo);
             }
         }
 
@@ -53,13 +52,13 @@ public class Tabuleiro {
     private void associarVizinhos() {
         for (Campo c1 : campos) {
             for (Campo c2 : campos) {
-                c2.adicionarVizinho(c2);
+                c1.adicionarVizinho(c2);
             }
         }
     }
 
     private void sortearMinas() {
-        long minasArmadas;
+        long minasArmadas = 0;
 
         do {
             int aleatorio = (int) (Math.random() * campos.size());
@@ -80,8 +79,19 @@ public class Tabuleiro {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
+        sb.append("  ");
+        for (int c = 0; c < colunas; c++) {
+            sb.append(" ");
+            sb.append(c);
+            sb.append(" ");
+        }
+
+        sb.append("\n");
+
         int i = 0;
         for (int l = 0; l < linhas; l++) {
+            sb.append(l);
+            sb.append(" ");
             for (int c = 0; c < colunas; c++) {
                 sb.append(" ");
                 sb.append(campos.get(i));
@@ -90,6 +100,7 @@ public class Tabuleiro {
             }
             sb.append("\n");
         }
+
         return sb.toString();
     }
 }

@@ -2,7 +2,6 @@ package br.com.nathcodes.campominado;
 
 import br.com.nathcodes.campominado.exceptions.ExplosaoException;
 import br.com.nathcodes.campominado.modelos.Campo;
-import br.com.nathcodes.campominado.service.CampoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,13 +16,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class CampoServiceTest {
 
     @Mock
-    private CampoService campoService;
     private Campo campo;
 
     @BeforeEach
     void iniciarCamop() {
         campo = new Campo(3, 3);
-        campoService = new CampoService();
     }
 
     @ParameterizedTest
@@ -35,7 +32,7 @@ class CampoServiceTest {
     })
     void testeVizinhoRealDistancia(int linha, int coluna) {
         Campo vizinho = new Campo(linha, coluna);
-        boolean resultado = campoService.adicionarVizinho(campo, vizinho);
+        boolean resultado = campo.adicionarVizinho(vizinho);
 
         assertTrue(resultado);
     }
@@ -49,7 +46,7 @@ class CampoServiceTest {
     })
     void testeVizinhoRealDistanciaDiagonal(int linha, int coluna) {
         Campo vizinho = new Campo(linha, coluna);
-        boolean resultado = campoService.adicionarVizinho(campo, vizinho);
+        boolean resultado = campo.adicionarVizinho(vizinho);
 
         assertTrue(resultado);
     }
@@ -63,7 +60,7 @@ class CampoServiceTest {
     })
     void testeNaoVizinhoRealDistanciaDiagonal(int linha, int coluna) {
         Campo vizinho = new Campo(linha, coluna);
-        boolean resultado = campoService.adicionarVizinho(campo, vizinho);
+        boolean resultado = campo.adicionarVizinho(vizinho);
 
         assertFalse(resultado);
     }
@@ -77,7 +74,7 @@ class CampoServiceTest {
     })
     void testeNaoVizinhoRealDistancia(int linha, int coluna) {
         Campo vizinho = new Campo(linha, coluna);
-        boolean resultado = campoService.adicionarVizinho(campo, vizinho);
+        boolean resultado = campo.adicionarVizinho(vizinho);
 
         assertFalse(resultado);
     }
@@ -85,7 +82,7 @@ class CampoServiceTest {
     @Test
     void testeAlternarMarcacaoComUmaChamada() {
         assertFalse(campo.isMarcado());
-        campoService.alternarMarcacao(campo);
+        campo.alternarMarcacao();
         assertTrue(campo.isMarcado());
     }
 
@@ -93,8 +90,8 @@ class CampoServiceTest {
     void testeAlternarMarcacaoComDuasChamadas() {
         assertFalse(campo.isMarcado());
 
-        campoService.alternarMarcacao(campo);
-        campoService.alternarMarcacao(campo);
+        campo.alternarMarcacao();
+        campo.alternarMarcacao();
 
         assertFalse(campo.isMarcado());
     }
@@ -113,16 +110,16 @@ class CampoServiceTest {
         campo.setMinado(minado);
         campo.setMarcado(marcado);
         campo.setAberto(aberto);
-        boolean resultado = campoService.abrir(campo);
+        boolean resultado = campo.abrir();
 
         assertEquals(resultado, resultadoParametrized);
     }
 
     @Test
     void testeAbrirCampoMinadoDeveLancarExplosaoException() {
-        campoService.minar(campo);
+        campo.minar();
 
-        assertThrows(ExplosaoException.class, () -> campoService.abrir(campo));
+        assertThrows(ExplosaoException.class, () -> campo.abrir());
     }
 
     @Test
@@ -133,10 +130,10 @@ class CampoServiceTest {
         assertFalse(campo22.isAberto());
         assertFalse(campo11.isAberto());
 
-        campoService.adicionarVizinho(campo22, campo11);
-        campoService.adicionarVizinho(campo, campo22);
+        campo.adicionarVizinho(campo11);
+        campo.adicionarVizinho(campo22);
 
-        campoService.abrir(campo);
+        campo.abrir();
 
         assertTrue(campo22.isAberto());
         assertTrue(campo11.isAberto());
@@ -146,7 +143,7 @@ class CampoServiceTest {
     void testeAbrirComVizinhosMinados() {
         Campo campo11 = new Campo(1, 1);
         Campo campo12 = new Campo(1, 2);
-        campoService.minar(campo12);
+        campo.minar();
 
         Campo campo22 = new Campo(2, 2);
 
@@ -154,11 +151,11 @@ class CampoServiceTest {
         assertFalse(campo11.isAberto());
         assertFalse(campo12.isAberto());
 
-        campoService.adicionarVizinho(campo22, campo11);
-        campoService.adicionarVizinho(campo22, campo12);
-        campoService.adicionarVizinho(campo, campo22);
+        campo.adicionarVizinho(campo11);
+        campo.adicionarVizinho(campo12);
+        campo.adicionarVizinho(campo22);
 
-        campoService.abrir(campo);
+        campo.abrir();
 
         assertTrue(campo22.isAberto());
         assertFalse(campo11.isAberto());
